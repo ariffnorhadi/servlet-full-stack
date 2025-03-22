@@ -1,0 +1,18 @@
+# Ignore build and distribution directories
+/build/
+/dist/
+
+# Ignore IDE-specific files (NetBeans in this case)
+/nbproject/private/
+/nbproject/build-impl.xml
+
+# Ignore compiled files (if applicable)
+/*.class
+
+# Ignore dependency JARs if managed elsewhere (like in a lib folder)
+# /mysql-connector-java-*.jar
+
+# Ignore logs and temporary files
+*.log
+.DS_Store
+Thumbs.db
