@@ -26,7 +26,7 @@ public class DBConnection {
     } else {
       try {
         Class.forName("com.mysql.jdbc.Driver");
-        myConnection = DriverManager.getConnection(myDbUrl, "root", "");
+        myConnection = DriverManager.getConnection(myDbUrl, "root", ""); // 2nd argument is username, 3rd argument is password.
       } catch (SQLException e) {
         e.printStackTrace();
       }
