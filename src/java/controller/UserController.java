@@ -26,7 +26,7 @@ public class UserController extends HttpServlet {
   @Override
   public void init() {
     try {
-      userDAO = new UserDAO();
+      userDAO = new UserDAO(); // What is this UserDAO? Let's go to the file itself to learn more about it (servlet-full-stack\src\java\modelDAO\UserDAO.java)
     } catch (ClassNotFoundException ex) {
       Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
     }
@@ -70,10 +70,13 @@ public class UserController extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    String action = request.getParameter("action");
+    // Remember that we send `action` param to tell servlet what to do with all the params? This is the first thing we want to retrieve
+    // so that we know what action to be done with all those attributes.
+    // the value of the param is `create_new_user`, after knowing what to do, then we go to the method (createNewUser)
+    String action = request.getParameter("action"); // Step 5: retrieve the param, get the value
     //processRequest(request, response);
     switch (action) {
-      case "create_new_user" ->
+      case "create_new_user" -> // Step 6: create a method to process the params (pass the argument request and response too), so now let's go to the method
         createNewUser(request, response);
       default ->
         processRequest(request, response);
@@ -106,19 +109,28 @@ public class UserController extends HttpServlet {
 
   private void createNewUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
     //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+    // Now we're here.. Let's start doing some backend process
+    // Step 7: Retrieve all the params that we need
     String fullName = request.getParameter("full_name");
     String email = request.getParameter("email");
     String password = request.getParameter("password");
 
+    // Step 8 (optional): Put them in an object.
     User newUser = new User();
     newUser.setFullName(fullName);
     newUser.setEmail(email);
     newUser.setPassword(password);
 
+    // Step 9: Insert the data into database using DAO service. This is why initialise the userDAO when initiating this servlet, so that we can use this everywhere.
+    // Refer init() method at the top of this file
     userDAO.insertUser(newUser);
 
+    // Usually Create process is a POST action, so we use response.sendRedirect() and send user to any page that we want to. in this case, it's login.jsp
+    // Step 10: Redirect to login.jsp
     response.sendRedirect("login.jsp");
 
+    // And we're done with user registration. Congratulations!
   }
 
 }
