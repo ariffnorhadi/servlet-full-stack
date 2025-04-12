@@ -10,12 +10,15 @@ import database.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.ResultSet;
 import model.User;
 
 /**
  *
  * @author ariffnorhadi
- * 
+ *
  * UserDAO is a Data Access Object (DAO) class for managing user-related
  * database operations. This class uses connection to the DB that's provided by
  * DBConnection.java (servlet-full-stack\src\java\database\DBConnection.java)
@@ -50,10 +53,10 @@ public class UserDAO {
       error.printStackTrace();
     }
   }
-  
+
   // This method also insert data into table.
-  public void insertUserData(String fullName, String email, String password){
-      try {
+  public void insertUserData(String fullName, String email, String password) {
+    try {
       PreparedStatement preparedStatement = connection.prepareStatement("insert into users(full_name, email, password) values(?, ?, ?)");
 
       preparedStatement.setString(1, fullName);
@@ -64,6 +67,26 @@ public class UserDAO {
     } catch (SQLException error) {
       error.printStackTrace();
     }
+  }
+
+  public User validateLogin(String email, String password) {
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("select * from users where email = ? and password = ?");
+      preparedStatement.setString(1, email);
+      preparedStatement.setString(2, password);
+
+      ResultSet result = preparedStatement.executeQuery();
+      if (result.next()) {
+        // String username = result.getString("username");
+        String fullName = result.getString("full_name");
+        User user = new User();
+        user.setFullName(fullName);
+        return user;
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
   }
 
 }

@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.User;
 import modelDAO.UserDAO;
 
@@ -94,7 +95,15 @@ public class UserController extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    processRequest(request, response);
+    // processRequest(request, response);
+    String action = request.getParameter("action");
+
+    switch (action) {
+      case "login" ->
+        validateLogin(request, response);
+      default ->
+        processRequest(request, response);
+    }
   }
 
   /**
@@ -131,6 +140,21 @@ public class UserController extends HttpServlet {
     response.sendRedirect("login.jsp");
 
     // And we're done with user registration. Congratulations!
+  }
+
+  private void validateLogin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
+
+    User user = userDAO.validateLogin(email, password);
+
+    if (user != null) {
+      // HttpSession session = request.getSession();
+      // session.setAttribute("logged_in_user", user);
+      response.sendRedirect("dashboard.jsp");
+    } else {
+      request.getRequestDispatcher("login.jsp").forward(request, response);
+    }
   }
 
 }
