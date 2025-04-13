@@ -153,6 +153,7 @@ public class UserController extends HttpServlet {
       // session.setAttribute("logged_in_user", user);
       response.sendRedirect("dashboard.jsp");
     } else {
+      request.setAttribute("loginErrorMessage", "Your credentials are wrong");
       request.getRequestDispatcher("login.jsp").forward(request, response);
     }
   }

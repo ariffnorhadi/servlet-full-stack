@@ -17,6 +17,10 @@
   <body class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
       <h2 class="text-2xl font-bold text-center text-gray-700">Login</h2>
+      <% String loginErrorMessage = (String) request.getAttribute("loginErrorMessage"); %>
+      <% if (loginErrorMessage != null) { %>
+      <p><%= loginErrorMessage%></p>
+      <%}%>
       <form class="mt-4" action="UserController" method="POST">
         <div>
           <label class="block text-sm font-medium text-gray-700">Email</label>
